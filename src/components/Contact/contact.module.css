@@ -1,0 +1,16 @@
+.contactItem {
+    display: flex;
+    gap: 20px;
+    border: 1px solid black;
+    border-radius: 5px;
+    padding: 10px;
+}
+
+.contactDescription {
+    padding: 5px;
+}
+
+.deleteButton {
+    cursor: pointer;
+    align-self: center;
+}

@@ -1,0 +1,16 @@
+.formContainer {
+    max-width: 300px;
+    border: 1px solid black;
+    padding: 10px;
+}
+
+.formAddContact {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.formButton {
+    cursor: pointer;
+}
