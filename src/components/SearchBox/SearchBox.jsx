@@ -1,6 +1,7 @@
-import css from "./SearchBox.module.css";
 import { useDispatch, useSelector } from "react-redux";
-import { changeFilter } from "../../redux/filtersSlice";
+import { changeFilter } from "../../redux/filters/slice";
+import { TextField } from "@mui/material";
+import css from "./SearchBox.module.css";
 
 const SearchBox = () => {
   const dispatch = useDispatch();
@@ -10,11 +11,9 @@ const SearchBox = () => {
   };
   return (
     <div className={css.searchContainer}>
-      <label htmlFor="search">Find contacts by name:</label>
-      <input
-        className={css.searchInput}
-        type="text"
-        id="search"
+      <TextField
+        label="Find contacts"
+        variant="outlined"
         value={searchContact}
         onChange={handleChange}
       />

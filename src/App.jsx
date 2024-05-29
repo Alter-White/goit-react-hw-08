@@ -1,25 +1,50 @@
-import ContactList from "./components/ContactList/ContactList";
-import ContactForm from "./components/ContactForm/ContactForm";
-import SearchBox from "./components/SearchBox/SearchBox";
-import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { fetchContacts } from "./redux/contactsOps";
-import { selectFilteredContacts } from "./redux/contactsSlice";
+import { lazy, useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { Route, Routes } from "react-router-dom";
+import RestrictedRoute from "./components/RestrictedRoute";
+import PrivateRoute from "./components/PrivateRoute";
+import { useAuth } from "./hooks";
+import Modal from "react-modal";
+import Layout from "./components/Layout";
+import { refreshUser } from "./redux/auth/operations";
+
+const Home = lazy(() => import("./pages/Home"));
+const Registration = lazy(() => import("./pages/Registration"));
+const Login = lazy(() => import("./pages/Login"));
+const Contacts = lazy(() => import("./pages/Contacts"));
+
+Modal.setAppElement("#root");
 
 function App() {
   const dispatch = useDispatch();
-  const contacts = useSelector(selectFilteredContacts);
+  const { isRefreshing } = useAuth();
 
   useEffect(() => {
-    dispatch(fetchContacts());
+    dispatch(refreshUser());
   }, [dispatch]);
-  return (
-    <div>
-      <h1>Phonebook</h1>
-      <ContactForm />
-      <SearchBox />
-      <ContactList contacts={contacts} />
-    </div>
+
+  return isRefreshing ? (
+    <b>Refreshing user...</b>
+  ) : (
+    <Routes>
+      <Route path="/" element={<Layout />}>
+        <Route index element={<Home />} />
+        <Route
+          path="register"
+          element={
+            <RestrictedRoute redirectTo="/contacts" component={Registration} />
+          }
+        />
+        <Route
+          path="login"
+          element={<RestrictedRoute redirectTo="/contacts" component={Login} />}
+        />
+        <Route
+          path="contacts"
+          element={<PrivateRoute redirectTo="/login" component={Contacts} />}
+        />
+      </Route>
+    </Routes>
   );
 }
 

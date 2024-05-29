@@ -1,10 +1,11 @@
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { nanoid } from "nanoid";
-import css from "./ContactForm.module.css";
 import { useDispatch, useSelector } from "react-redux";
-import { addContact } from "../../redux/contactsOps";
-import { selectFilteredContacts } from "../../redux/contactsSlice";
+import { addContact } from "../../redux/contacts/operations";
+import { selectFilteredContacts } from "../../redux/contacts/selectors";
+import { TextField, Button } from "@mui/material";
+import { styled } from "@mui/system";
 
 const ContactForm = () => {
   const contacts = useSelector(selectFilteredContacts);
@@ -29,6 +30,19 @@ const ContactForm = () => {
     dispatch(addContact({ id: nanoid(), ...values }));
     resetForm();
   };
+
+  const FormContainer = styled("div")`
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  `;
+
+  const FormAddContact = styled("div")`
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  `;
+
   return (
     <Formik
       initialValues={INITIAL_FORM_DATA}
@@ -36,21 +50,33 @@ const ContactForm = () => {
       onSubmit={handleSubmit}
     >
       <Form>
-        <div className={css.formContainer}>
-          <div className={css.formAddContact}>
-            <label htmlFor="name">Name</label>
-            <Field type="text" name="name" />
+        <FormContainer>
+          <FormAddContact>
+            <Field
+              as={TextField}
+              type="text"
+              name="name"
+              id="name"
+              variant="outlined"
+              label="Name"
+            />
             <ErrorMessage name="name" component="div" />
-          </div>
-          <div className={css.formAddContact}>
-            <label htmlFor="number">Number</label>
-            <Field type="text" name="number" />
+          </FormAddContact>
+          <FormAddContact>
+            <Field
+              as={TextField}
+              type="text"
+              name="number"
+              id="number"
+              variant="outlined"
+              label="Number"
+            />
             <ErrorMessage name="number" component="div" />
-          </div>
-          <button className={css.formButton} type="submit">
+          </FormAddContact>
+          <Button variant="contained" type="submit">
             Add Contact
-          </button>
-        </div>
+          </Button>
+        </FormContainer>
       </Form>
     </Formik>
   );
